@@ -1,3 +1,13 @@
 spring:
   application:
     name: AssetForge
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/asset_forge
+    username: alveskz
+    password: akz
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

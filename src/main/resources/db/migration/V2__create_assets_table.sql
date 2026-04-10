@@ -1,0 +1,9 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE assets (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
+    seller_id UUID NOT NULL REFERENCES users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
