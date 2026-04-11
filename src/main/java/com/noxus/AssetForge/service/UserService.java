@@ -37,7 +37,24 @@ public class UserService {
     }
 
     public UserResponseDTO findByUsername(String username) {
-        User user = repository.findByUsername(username);
+        User user = repository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("No records found for this username!" + username));
         return mapper.toDTO(user);
+    }
+
+    public UserResponseDTO update(UserRequestDTO user) {
+        if (user == null) throw new RuntimeException("User cannot be null");
+
+        User entity = repository.findByUsername(user.username())
+            .orElseThrow(() -> new RuntimeException("No records found for this username!" + user.username()));
+
+        return mapper.toDTO(entity);
+    }
+
+    public void delete(String username) {
+        User user = repository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("No records found for this username!" + username));
+
+        repository.delete(user);
     }
 }
