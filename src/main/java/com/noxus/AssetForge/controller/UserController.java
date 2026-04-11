@@ -1,5 +1,7 @@
 package com.noxus.AssetForge.controller;
 
+import com.noxus.AssetForge.dto.UserRequestDTO;
+import com.noxus.AssetForge.dto.UserResponseDTO;
 import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +19,17 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User newUser) {
+    public UserResponseDTO create(@RequestBody UserRequestDTO newUser) {
         return service.create(newUser);
     }
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserResponseDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{username}")
-    public User findByUsername(@PathVariable("username") String username) {
+    public UserResponseDTO findByUsername(@PathVariable("username") String username) {
         return service.findByUsername(username);
     }
 }
