@@ -2,11 +2,13 @@ package com.noxus.AssetForge.controller;
 
 import com.noxus.AssetForge.dto.UserRequestDTO;
 import com.noxus.AssetForge.dto.UserResponseDTO;
-import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -18,18 +20,43 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping
-    public UserResponseDTO create(@RequestBody UserRequestDTO newUser) {
-        return service.create(newUser);
+    @PostMapping()
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO newUser) {
+        UserResponseDTO created = service.create(newUser);
+
+        return ResponseEntity
+            .created(URI.create("/users/" + created.id()))
+            .body(created);
     }
 
-    @GetMapping
-    public List<UserResponseDTO> findAll() {
-        return service.findAll();
+    @GetMapping()
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
+        return ResponseEntity.ok(service.findAll());
     }
 
-    @GetMapping("/{username}")
-    public UserResponseDTO findByUsername(@PathVariable("username") String username) {
-        return service.findByUsername(username);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserResponseDTO> findByUsername(
+        @PathVariable String username) {
+
+        return ResponseEntity.ok(service.findByUsername(username));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> update(
+        @PathVariable UUID id,
+        @RequestBody UserRequestDTO user) {
+
+        return ResponseEntity.ok(service.update(id, user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
