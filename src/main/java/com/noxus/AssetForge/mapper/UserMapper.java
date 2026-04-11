@@ -1,7 +1,7 @@
 package com.noxus.AssetForge.mapper;
 
-import com.noxus.AssetForge.dto.UserRequestDTO;
-import com.noxus.AssetForge.dto.UserResponseDTO;
+import com.noxus.AssetForge.dto.user.UserRequestDTO;
+import com.noxus.AssetForge.dto.user.UserResponseDTO;
 import com.noxus.AssetForge.model.User;
 import org.springframework.stereotype.Component;
 

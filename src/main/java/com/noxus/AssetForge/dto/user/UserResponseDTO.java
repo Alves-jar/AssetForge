@@ -1,4 +1,4 @@
-package com.noxus.AssetForge.dto;
+package com.noxus.AssetForge.dto.user;
 
 import java.time.Instant;
 import java.util.UUID;

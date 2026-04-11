@@ -1,7 +1,7 @@
 package com.noxus.AssetForge.controller;
 
-import com.noxus.AssetForge.dto.UserRequestDTO;
-import com.noxus.AssetForge.dto.UserResponseDTO;
+import com.noxus.AssetForge.dto.user.UserRequestDTO;
+import com.noxus.AssetForge.dto.user.UserResponseDTO;
 import com.noxus.AssetForge.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.noxus.AssetForge.dto;
+package com.noxus.AssetForge.dto.user;
 
 public record UserRequestDTO(
     String username,

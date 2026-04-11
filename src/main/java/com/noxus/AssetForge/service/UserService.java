@@ -1,7 +1,7 @@
 package com.noxus.AssetForge.service;
 
-import com.noxus.AssetForge.dto.UserRequestDTO;
-import com.noxus.AssetForge.dto.UserResponseDTO;
+import com.noxus.AssetForge.dto.user.UserRequestDTO;
+import com.noxus.AssetForge.dto.user.UserResponseDTO;
 import com.noxus.AssetForge.mapper.UserMapper;
 import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.repositories.UserRepository;
