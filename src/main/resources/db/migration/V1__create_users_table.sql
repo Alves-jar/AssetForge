@@ -4,7 +4,7 @@ CREATE TABLE users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    passwordHash VARCHAR(250) NOT NULL,
+    password_hash VARCHAR(250) NOT NULL,
     is_seller BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
