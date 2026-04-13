@@ -2,6 +2,8 @@ package com.noxus.AssetForge.service;
 
 import com.noxus.AssetForge.dto.user.UserRequestDTO;
 import com.noxus.AssetForge.dto.user.UserResponseDTO;
+import com.noxus.AssetForge.exception.RequiredObjectIsNullException;
+import com.noxus.AssetForge.exception.ResourceNotFoundException;
 import com.noxus.AssetForge.mapper.UserMapper;
 import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.repositories.UserRepository;
@@ -22,7 +24,7 @@ public class UserService {
     }
 
     public UserResponseDTO create(UserRequestDTO newUser) {
-        if (newUser == null) throw new RuntimeException("User cannot be null");
+        if (newUser == null) throw new RequiredObjectIsNullException("User cannot be null");
 
         User entity = mapper.toEntity(newUser);
         User saved = repository.save(entity);
@@ -39,7 +41,7 @@ public class UserService {
 
     public UserResponseDTO findById(UUID id) {
         User user = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "User not found with id: " + id
             ));
 
@@ -48,17 +50,17 @@ public class UserService {
 
     public UserResponseDTO findByUsername(String username) {
         User user = repository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "No records found for this username!" + username
             ));
         return mapper.toDTO(user);
     }
 
     public UserResponseDTO update(UUID id, UserRequestDTO user) {
-        if (user == null) throw new RuntimeException("User cannot be null");
+        if (user == null) throw new RequiredObjectIsNullException("User cannot be null");
 
         User entity = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "User not found with id: " + id
             ));
 
@@ -74,7 +76,7 @@ public class UserService {
 
     public void delete(UUID id) {
         User user = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "User not found with id: " + id
             ));
 

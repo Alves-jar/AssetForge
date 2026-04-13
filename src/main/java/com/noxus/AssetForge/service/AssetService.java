@@ -2,6 +2,8 @@ package com.noxus.AssetForge.service;
 
 import com.noxus.AssetForge.dto.asset.AssetRequestDTO;
 import com.noxus.AssetForge.dto.asset.AssetResponseDTO;
+import com.noxus.AssetForge.exception.RequiredObjectIsNullException;
+import com.noxus.AssetForge.exception.ResourceNotFoundException;
 import com.noxus.AssetForge.mapper.AssetMapper;
 import com.noxus.AssetForge.model.Asset;
 import com.noxus.AssetForge.model.User;
@@ -27,7 +29,7 @@ public class AssetService {
 
 
     public AssetResponseDTO create(AssetRequestDTO newAsset) {
-        if (newAsset == null) throw new RuntimeException("Asset cannot be null");
+        if (newAsset == null) throw new RequiredObjectIsNullException("Asset cannot be null");
 
         User seller = findSeller(newAsset.sellerId());
         Asset entity = mapper.toEntity(newAsset);
@@ -46,7 +48,7 @@ public class AssetService {
 
     public AssetResponseDTO findById(UUID id) {
         Asset asset = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "Asset not found with id: " + id
             ));
 
@@ -55,19 +57,17 @@ public class AssetService {
 
     public AssetResponseDTO findByName(String name) {
         Asset asset = repository.findByName(name)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "No records found for this name!" + name
             ));
         return mapper.toDTO(asset);
     }
 
     public AssetResponseDTO update(UUID id, AssetRequestDTO asset) {
-        if (asset == null) {
-            throw new RuntimeException("Asset cannot be null");
-        }
+        if (asset == null) throw new RequiredObjectIsNullException("Asset cannot be null");
 
         Asset entity = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "Asset not found with id: " + id
             ));
 
@@ -86,7 +86,7 @@ public class AssetService {
 
     public void delete(UUID id) {
         Asset asset = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new ResourceNotFoundException(
                 "Asset not found with id: " + id
             ));
 
@@ -95,6 +95,6 @@ public class AssetService {
 
     private User findSeller(UUID id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Seller not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + id));
     }
 }
