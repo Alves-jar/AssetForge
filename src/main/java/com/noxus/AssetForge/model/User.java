@@ -5,6 +5,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +30,9 @@ public class User {
 
     @Column(nullable = false)
     private boolean isSeller = false;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Asset> createdAssets = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     @CreatedDate
@@ -72,26 +77,31 @@ public class User {
         return isSeller;
     }
 
-    public void setSeller(boolean seller) {
+    public void setIsSeller(boolean seller) {
         isSeller = seller;
+    }
+
+    public List<Asset> getCreatedAssets() {
+        return createdAssets;
+    }
+
+    public void addAsset(Asset asset) {
+        createdAssets.add(asset);
+        asset.setSeller(this);
     }
 
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User user)) return false;
-        return isSeller == user.isSeller && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(createdAt, user.createdAt);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, passwordHash, isSeller, createdAt);
+        return Objects.hashCode(id);
     }
 }

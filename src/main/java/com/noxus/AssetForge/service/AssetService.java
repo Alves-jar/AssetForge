@@ -27,7 +27,6 @@ public class AssetService {
         this.userRepository = userRepository;
     }
 
-
     public AssetResponseDTO create(AssetRequestDTO newAsset) {
         if (newAsset == null) throw new RequiredObjectIsNullException("Asset cannot be null");
 
@@ -58,13 +57,15 @@ public class AssetService {
     public AssetResponseDTO findByName(String name) {
         Asset asset = repository.findByName(name)
             .orElseThrow(() -> new ResourceNotFoundException(
-                "No records found for this name!" + name
+                "No records found for this name: " + name
             ));
+
         return mapper.toDTO(asset);
     }
 
     public AssetResponseDTO update(UUID id, AssetRequestDTO asset) {
-        if (asset == null) throw new RequiredObjectIsNullException("Asset cannot be null");
+        if (asset == null)
+            throw new RequiredObjectIsNullException("Asset cannot be null");
 
         Asset entity = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(
@@ -74,7 +75,9 @@ public class AssetService {
         entity.setName(asset.name());
         entity.setPrice(asset.price());
 
-        if (asset.sellerId() != null) {
+        if (asset.sellerId() != null &&
+            !asset.sellerId().equals(entity.getSeller().getId())) {
+
             User seller = findSeller(asset.sellerId());
             entity.setSeller(seller);
         }
@@ -95,6 +98,8 @@ public class AssetService {
 
     private User findSeller(UUID id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Seller not found with id: " + id
+            ));
     }
 }

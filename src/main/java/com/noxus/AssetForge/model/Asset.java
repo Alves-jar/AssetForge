@@ -23,7 +23,7 @@ public class Asset {
     @Column(nullable = false)
     private Double price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
 
@@ -77,11 +77,11 @@ public class Asset {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Asset asset)) return false;
-        return Objects.equals(id, asset.id) && Objects.equals(name, asset.name) && Objects.equals(price, asset.price) && Objects.equals(seller, asset.seller) && Objects.equals(createdAt, asset.createdAt);
+        return Objects.equals(id, asset.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, seller, createdAt);
+        return Objects.hashCode(id);
     }
 }
