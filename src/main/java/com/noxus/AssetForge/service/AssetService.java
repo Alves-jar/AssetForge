@@ -2,6 +2,7 @@ package com.noxus.AssetForge.service;
 
 import com.noxus.AssetForge.dto.asset.AssetRequestDTO;
 import com.noxus.AssetForge.dto.asset.AssetResponseDTO;
+import com.noxus.AssetForge.dto.response.PageResponse;
 import com.noxus.AssetForge.exception.RequiredObjectIsNullException;
 import com.noxus.AssetForge.exception.ResourceNotFoundException;
 import com.noxus.AssetForge.mapper.AssetMapper;
@@ -9,9 +10,10 @@ import com.noxus.AssetForge.model.Asset;
 import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.repositories.AssetRepository;
 import com.noxus.AssetForge.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,11 +40,10 @@ public class AssetService {
         return mapper.toDTO(saved);
     }
 
-    public List<AssetResponseDTO> findAll() {
-        return repository.findAll()
-            .stream()
-            .map(mapper::toDTO)
-            .toList();
+    public PageResponse<AssetResponseDTO> findAll(Pageable pageable) {
+        Page<Asset> page = repository.findAll(pageable);
+
+        return buildPageResponse(page);
     }
 
     public AssetResponseDTO findById(UUID id) {
@@ -101,5 +102,15 @@ public class AssetService {
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Seller not found with id: " + id
             ));
+    }
+
+    private PageResponse<AssetResponseDTO> buildPageResponse(Page<Asset> page) {
+        return new PageResponse<>(
+            page.getContent().stream().map(mapper::toDTO).toList(),
+            page.getNumber(),
+            page.getSize(),
+            page.getTotalElements(),
+            page.getTotalPages()
+        );
     }
 }

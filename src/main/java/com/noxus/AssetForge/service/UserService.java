@@ -1,5 +1,6 @@
 package com.noxus.AssetForge.service;
 
+import com.noxus.AssetForge.dto.response.PageResponse;
 import com.noxus.AssetForge.dto.user.UserRequestDTO;
 import com.noxus.AssetForge.dto.user.UserResponseDTO;
 import com.noxus.AssetForge.exception.RequiredObjectIsNullException;
@@ -7,11 +8,11 @@ import com.noxus.AssetForge.exception.ResourceNotFoundException;
 import com.noxus.AssetForge.mapper.UserMapper;
 import com.noxus.AssetForge.model.User;
 import com.noxus.AssetForge.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-
 @Service
 public class UserService {
 
@@ -32,11 +33,10 @@ public class UserService {
         return mapper.toDTO(saved);
     }
 
-    public List<UserResponseDTO> findAll() {
-        return repository.findAll()
-            .stream()
-            .map(mapper::toDTO)
-            .toList();
+    public PageResponse<UserResponseDTO> findAll(Pageable pageable) {
+        Page<User> page = repository.findAll(pageable);
+
+        return buildPageResponse(page);
     }
 
     public UserResponseDTO findById(UUID id) {
@@ -51,8 +51,9 @@ public class UserService {
     public UserResponseDTO findByUsername(String username) {
         User user = repository.findByUsername(username)
             .orElseThrow(() -> new ResourceNotFoundException(
-                "No records found for this username!" + username
+                "No records found for this username: " + username
             ));
+
         return mapper.toDTO(user);
     }
 
@@ -81,5 +82,15 @@ public class UserService {
             ));
 
         repository.delete(user);
+    }
+
+    private PageResponse<UserResponseDTO> buildPageResponse(Page<User> page) {
+        return new PageResponse<>(
+            page.getContent().stream().map(mapper::toDTO).toList(),
+            page.getNumber(),
+            page.getSize(),
+            page.getTotalElements(),
+            page.getTotalPages()
+        );
     }
 }

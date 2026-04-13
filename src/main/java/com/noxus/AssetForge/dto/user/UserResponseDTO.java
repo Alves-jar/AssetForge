@@ -9,5 +9,4 @@ public record UserResponseDTO(
     String email,
     boolean isSeller,
     Instant createdAt
-) {
-}
+) {}

@@ -1,13 +1,17 @@
 package com.noxus.AssetForge.controller;
 
+import com.noxus.AssetForge.dto.response.PageResponse;
 import com.noxus.AssetForge.dto.user.UserRequestDTO;
 import com.noxus.AssetForge.dto.user.UserResponseDTO;
 import com.noxus.AssetForge.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserResponseDTO>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<PageResponse<UserResponseDTO>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(service.findAll(pageable));
     }
 
     @GetMapping("/{id}")
