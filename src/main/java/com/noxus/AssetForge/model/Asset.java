@@ -23,6 +23,9 @@ public class Asset {
     @Column(nullable = false)
     private Double price;
 
+    @Column(name = "asset_url", nullable = false, length = 255)
+    private String assetUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
@@ -56,6 +59,14 @@ public class Asset {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getAssetUrl() {
+        return assetUrl;
+    }
+
+    public void setAssetUrl(String assetUrl) {
+        this.assetUrl = assetUrl;
     }
 
     public User getSeller() {

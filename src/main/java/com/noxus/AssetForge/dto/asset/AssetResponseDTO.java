@@ -7,6 +7,7 @@ public record AssetResponseDTO(
     UUID id,
     String name,
     Double price,
+    String assetUrl,
     UUID sellerId,
     String sellerName,
     Instant createdAt

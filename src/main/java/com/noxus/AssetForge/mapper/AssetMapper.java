@@ -16,6 +16,7 @@ public class AssetMapper implements Mapper<Asset, AssetResponseDTO, AssetRequest
             asset.getId(),
             asset.getName(),
             asset.getPrice(),
+            asset.getAssetUrl(),
             asset.getSeller().getId(),
             asset.getSeller().getUsername(),
             asset.getCreatedAt()

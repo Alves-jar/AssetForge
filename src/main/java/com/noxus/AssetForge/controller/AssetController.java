@@ -2,11 +2,13 @@ package com.noxus.AssetForge.controller;
 
 import com.noxus.AssetForge.dto.asset.AssetRequestDTO;
 import com.noxus.AssetForge.dto.asset.AssetResponseDTO;
+import com.noxus.AssetForge.dto.asset.AssetUploadDTO;
 import com.noxus.AssetForge.dto.response.PageResponse;
 import com.noxus.AssetForge.service.AssetService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -22,11 +24,25 @@ public class AssetController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<AssetResponseDTO> create(@RequestBody AssetRequestDTO newAsset) {
-        AssetResponseDTO created = service.create(newAsset);
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<AssetResponseDTO> create(
+        @RequestParam String name,
+        @RequestParam Double price,
+        @RequestParam UUID sellerId,
+        @RequestParam MultipartFile file
+    ) {
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        AssetUploadDTO dto = new AssetUploadDTO(
+            name,
+            price,
+            sellerId,
+            file
+        );
+
+        AssetResponseDTO created = service.create(dto);
+
+        URI uri = ServletUriComponentsBuilder
+            .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(created.id())
             .toUri();

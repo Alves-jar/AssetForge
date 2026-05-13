@@ -1,0 +1,2 @@
+ALTER TABLE assets
+ADD COLUMN asset_url VARCHAR(255) NOT NULL;
